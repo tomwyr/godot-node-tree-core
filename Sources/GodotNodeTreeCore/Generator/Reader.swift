@@ -8,7 +8,7 @@ struct GodotProjectReader {
       .filter { $0.pathExtension == "tscn" }
       .map { file in
         let fileName = file.deletingPathExtension().lastPathComponent
-        let name = fileName.split(whereSeparator: ["_", "-"].contains)
+        let name = fileName.split(separator: /[-_]/)
           .map(\.firstCapitalized)
           .joined()
         let content = try String(contentsOf: file)
