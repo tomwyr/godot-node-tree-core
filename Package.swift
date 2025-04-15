@@ -3,16 +3,16 @@
 import PackageDescription
 
 let package = Package(
-  name: "GodotSwiftTree",
+  name: "GodotNodeTreeCore",
   platforms: [.macOS(.v14)],
   products: [
     .library(
-      name: "GodotNodeTree",
+      name: "GodotNodeTreeCore",
       type: .dynamic,
-      targets: ["GodotNodeTree"]
+      targets: ["GodotNodeTreeCore"]
     )
   ],
   targets: [
-    .target(name: "GodotNodeTree")
+    .target(name: "GodotNodeTreeCore")
   ]
 )
