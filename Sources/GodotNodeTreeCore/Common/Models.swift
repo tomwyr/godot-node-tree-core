@@ -3,7 +3,7 @@ struct SceneData {
   let content: String
 }
 
-struct NodeParams {
+struct NodeParams: Codable {
   let name: String
   let type: String?
   let instance: String?

@@ -10,21 +10,12 @@ public struct NodeTreeGenerator {
     self.parser = parser
   }
 
-  func generate(projectPath: String) throws(GenerateNodeTreeError) -> NodeTree {
-    do {
-      let scenesData = try reader.readScenes(projectPath: projectPath)
-      let scenes = try scenesData.map { data in
-        let root = try parser.parse(sceneData: data)
-        return Scene(name: data.name, root: root)
-      }
-      return NodeTree(scenes: scenes)
-    } catch {
-      throw .unknown
+  func generate(projectPath: String) throws(GodotNodeTreeError) -> NodeTree {
+    let scenesData = try reader.readScenes(projectPath: projectPath)
+    let scenes = try scenesData.map { data throws(GodotNodeTreeError) in
+      let root = try parser.parse(sceneData: data)
+      return Scene(name: data.name, root: root)
     }
+    return NodeTree(scenes: scenes)
   }
-}
-
-enum GenerateNodeTreeError: Error, Codable {
-  // TODO Add proper error handling
-  case unknown
 }

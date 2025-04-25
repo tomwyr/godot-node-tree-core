@@ -1,7 +1,7 @@
 import RegexBuilder
 
 struct GodotNodesParser {
-  func parse(sceneData: SceneData) throws -> NodeType {
+  func parse(sceneData: SceneData) throws(GodotNodeTreeError) -> NodeType {
     let scenePathsById = ScenesParser().parse(sceneData: sceneData)
     return try NodesParser(scenePathsById: scenePathsById).parse(sceneData: sceneData)
   }
@@ -30,7 +30,7 @@ private struct ScenesParser {
 private struct NodesParser {
   let scenePathsById: [String: String]
 
-  func parse(sceneData: SceneData) throws -> NodeType {
+  func parse(sceneData: SceneData) throws(GodotNodeTreeError) -> NodeType {
     let nodeParams = splitToEntries(data: sceneData.content, entryType: "node")
       .map(parseEntryParams)
       .compactMap(extractNodeParams)
@@ -50,7 +50,9 @@ private struct NodesParser {
     return NodeParams(name: name, type: type, instance: instance, parent: parent)
   }
 
-  private func createRootNode(sceneName: String, params: [NodeParams]) throws -> NodeType {
+  private func createRootNode(sceneName: String, params: [NodeParams]) throws(GodotNodeTreeError)
+    -> NodeType
+  {
     let childrenByParent = Dictionary(grouping: params, by: { $0.parent })
     let rootParams = params.first { $0.parent == nil }
 
@@ -64,7 +66,7 @@ private struct NodesParser {
 
 extension NodeParams {
   func toNode(_ childrenByParent: [String?: [NodeParams]], _ scenePathsById: [String: String])
-    throws -> NodeType
+    throws(GodotNodeTreeError) -> NodeType
   {
     if case let (type?, nil) = (type, instance) {
       let childrenKey =
@@ -74,8 +76,10 @@ extension NodeParams {
         default: "\(parent!)/\(name)"
         }
 
-      let children = try (childrenByParent[childrenKey] ?? [])
-        .map { params in try params.toNode(childrenByParent, scenePathsById) }
+      let childrenParams = childrenByParent[childrenKey, default: []]
+      let children = try childrenParams.map { params throws(GodotNodeTreeError) in
+        try params.toNode(childrenByParent, scenePathsById)
+      }
 
       return if !children.isEmpty {
         .parentNode(ParentNode(name: name, type: type, children: children))
