@@ -1,4 +1,4 @@
-public struct NodeTreeGenerator {
+struct NodeTreeGenerator {
   let reader: GodotProjectReader
   let parser: GodotNodesParser
 
