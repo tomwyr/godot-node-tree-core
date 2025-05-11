@@ -12,8 +12,12 @@ struct NodeTreeGenerator {
     self.parser = parser
   }
 
-  func generate(projectPath: String) throws(GodotNodeTreeError) -> NodeTree {
-    try validateProjectPath(projectPath)
+  func generate(projectPath: String, validateProjectPath: Bool) throws(GodotNodeTreeError)
+    -> NodeTree
+  {
+    if validateProjectPath {
+      try validateInput(projectPath: projectPath)
+    }
     let scenesData = try reader.readScenes(projectPath: projectPath)
     let scenes = try scenesData.map { data throws(GodotNodeTreeError) in
       let root = try parser.parse(sceneData: data)
@@ -22,8 +26,8 @@ struct NodeTreeGenerator {
     return NodeTree(scenes: scenes)
   }
 
-  func validateProjectPath(_ projectPath: String) throws(GodotNodeTreeError) {
-    let projectFilePath =  URL(filePath: projectPath).appending(component: "project.godot").path()
+  func validateInput(projectPath: String) throws(GodotNodeTreeError) {
+    let projectFilePath = URL(filePath: projectPath).appending(component: "project.godot").path()
     guard FileManager.default.fileExists(atPath: projectFilePath) else {
       throw .invalidGodotProject(projectPath: projectPath)
     }
