@@ -22,9 +22,10 @@ struct NodeTreeGenerator {
     return NodeTree(scenes: scenes)
   }
 
-  func validateProjectPath(_ path: String) throws(GodotNodeTreeError) {
-    guard FileManager.default.fileExists(atPath: path) else {
-      throw .invalidGodotProject(projectPath: path)
+  func validateProjectPath(_ projectPath: String) throws(GodotNodeTreeError) {
+    let projectFilePath =  URL(filePath: projectPath).appending(component: "project.godot").path()
+    guard FileManager.default.fileExists(atPath: projectFilePath) else {
+      throw .invalidGodotProject(projectPath: projectPath)
     }
   }
 }
