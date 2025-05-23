@@ -9,10 +9,18 @@ let package = Package(
     .library(
       name: "GodotNodeTreeCore",
       type: .dynamic,
-      targets: ["GodotNodeTreeCore"]
+      targets: ["GodotNodeTreeCore"],
     )
   ],
+  dependencies: [
+    .package(url: "https://github.com/tomwyr/union-codable", from: "1.0.0")
+  ],
   targets: [
-    .target(name: "GodotNodeTreeCore")
-  ]
+    .target(
+      name: "GodotNodeTreeCore",
+      dependencies: [
+        .product(name: "UnionCodable", package: "union-codable")
+      ],
+    )
+  ],
 )

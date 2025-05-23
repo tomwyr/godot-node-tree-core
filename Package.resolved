@@ -1,0 +1,24 @@
+{
+  "originHash" : "91a152898aa3acef6410f8895b0498a29faf1d262a417d6b3ed0f119eafbcef4",
+  "pins" : [
+    {
+      "identity" : "swift-syntax",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-syntax.git",
+      "state" : {
+        "revision" : "f99ae8aa18f0cf0d53481901f88a0991dc3bd4a2",
+        "version" : "601.0.1"
+      }
+    },
+    {
+      "identity" : "union-codable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/tomwyr/union-codable",
+      "state" : {
+        "revision" : "5dc0b1af151dfa530ffe522fd1e6bb0b11f13215",
+        "version" : "1.0.0"
+      }
+    }
+  ],
+  "version" : 3
+}

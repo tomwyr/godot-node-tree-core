@@ -1,3 +1,6 @@
+import UnionCodable
+
+@UnionCodable(discriminator: "errorType")
 enum GodotNodeTreeError: Error, Codable {
   case invalidGodotProject(projectPath: String)
   case scanningScenesFailed(projectPath: String)
