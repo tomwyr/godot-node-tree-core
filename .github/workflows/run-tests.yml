@@ -1,0 +1,21 @@
+name: Run tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-22.04
+    container: swift:6.1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # - name: Setup Swift
+      #   uses: swift-actions/setup-swift@v2
+
+      - name: Run tests
+        run: swift test
