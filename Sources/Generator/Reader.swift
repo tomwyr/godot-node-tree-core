@@ -23,7 +23,7 @@ struct GodotProjectReader {
 
   private func readScene(_ file: URL) throws(GodotNodeTreeError) -> String {
     do {
-      return try String(contentsOf: file)
+      return try String(contentsOf: file, encoding: .utf8)
     } catch {
       throw .readingSceneFailed(scenePath: file.absoluteString)
     }
