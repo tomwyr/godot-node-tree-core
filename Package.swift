@@ -21,6 +21,13 @@ let package = Package(
       dependencies: [
         .product(name: "UnionCodable", package: "union-codable")
       ],
-    )
+    ),
+    .testTarget(
+      name: "GodotNodeTreeCoreTests",
+      dependencies: [
+        .target(name: "GodotNodeTreeCore")
+      ],
+      exclude: ["Resources"],
+    ),
   ],
 )

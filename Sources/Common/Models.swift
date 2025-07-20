@@ -5,30 +5,30 @@ struct SceneData {
   let content: String
 }
 
-struct NodeParams: Codable {
+struct NodeParams: Codable, Equatable {
   let name: String
   let type: String?
   let instance: String?
   let parent: String?
 }
 
-struct NodeTree: Codable {
+struct NodeTree: Codable, Equatable {
   let scenes: [Scene]
 }
 
-struct Scene: Codable {
+struct Scene: Codable, Equatable {
   let name: String
   let root: NodeType
 }
 
 @UnionCodable(discriminator: "nodeType")
-enum NodeType: Codable {
+enum NodeType: Codable, Equatable {
   case parentNode(ParentNode)
   case leafNode(LeafNode)
   case nestedScene(NestedScene)
 }
 
-protocol Node: Codable {
+protocol Node: Codable, Equatable {
   var name: String { get }
 }
 
