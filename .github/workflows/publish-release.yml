@@ -1,0 +1,101 @@
+name: Publish new release to GitHub
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "[0-9]+.[0-9]+.[0-9]+"
+
+permissions:
+  contents: write
+
+jobs:
+  # run-tests:
+  #   runs-on: ubuntu-22.04
+
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v4
+
+  #     - name: Setup Swift
+  #       uses: SwiftyLab/setup-swift@latest
+  #       with:
+  #         swift-version: "6.1.0"
+  
+  #     - name: Run tests
+  #       run: swift test
+
+  build-and-upload:
+    # needs: run-tests
+
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-22.04
+            platform: linux
+            file_name: libGodotNodeTreeCore
+            file_ext: .so
+          - os: macos-14
+            platform: macos
+            file_name: libGodotNodeTreeCore
+            file_ext: .dylib
+          - os: windows-latest
+            platform: windows
+            file_name: GodotNodeTreeCore
+            file_ext: .dll
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Swift
+        uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.1.0"
+
+      - name: Build release binary
+        run: swift build -c release
+
+      - name: Prepare binary
+        id: prepare-binary
+        shell: bash
+        run: |
+          source_path=.build/release/${{ matrix.file_name }}${{ matrix.file_ext }}
+          out_path=.build/godotNodeTreeCore-${{ github.ref_name }}-${{ matrix.platform }}${{ matrix.file_ext }}
+          cp $source_path $out_path
+          chmod +x $out_path
+          echo "out_path=$out_path" >> $GITHUB_OUTPUT
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: ${{ matrix.platform }}
+          path: ${{ steps.prepare-binary.outputs.out_path }}
+
+  create-release:
+    needs: build-and-upload
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: assets
+          merge-multiple: true
+
+      - name: Get release id
+        id: release-id
+        run: |
+          version=${{ github.ref_name }}
+          date=$(date +'%Y-%m-%d')
+          id=$(echo "$version - $data" | tr '.' -d | tr ' ' '-')
+          echo "id=$id" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ github.ref_name }}
+          files: assets/*
+          body: |
+            [Changelod](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${{ steps.release-id.outputs.id }})
