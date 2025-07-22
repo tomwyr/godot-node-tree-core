@@ -21,7 +21,7 @@ jobs:
         uses: SwiftyLab/setup-swift@latest
         with:
           swift-version: "6.1.0"
-  
+
       - name: Run tests
         run: swift test
 
@@ -60,12 +60,7 @@ jobs:
       - name: Prepare binary
         id: prepare-binary
         shell: bash
-        run: |
-          source_path=.build/release/${{ matrix.file_name }}${{ matrix.file_ext }}
-          out_path=.build/godotNodeTreeCore-${{ github.ref_name }}-${{ matrix.platform }}${{ matrix.file_ext }}
-          cp $source_path $out_path
-          chmod +x $out_path
-          echo "out_path=$out_path" >> $GITHUB_OUTPUT
+        run: scripts/prepare-binary.sh
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
