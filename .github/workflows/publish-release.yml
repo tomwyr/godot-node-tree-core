@@ -10,23 +10,23 @@ permissions:
   contents: write
 
 jobs:
-  # run-tests:
-  #   runs-on: ubuntu-22.04
+  run-tests:
+    runs-on: ubuntu-22.04
 
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v4
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-  #     - name: Setup Swift
-  #       uses: SwiftyLab/setup-swift@latest
-  #       with:
-  #         swift-version: "6.1.0"
+      - name: Setup Swift
+        uses: SwiftyLab/setup-swift@latest
+        with:
+          swift-version: "6.1.0"
   
-  #     - name: Run tests
-  #       run: swift test
+      - name: Run tests
+        run: swift test
 
   build-and-upload:
-    # needs: run-tests
+    needs: run-tests
 
     strategy:
       matrix:
