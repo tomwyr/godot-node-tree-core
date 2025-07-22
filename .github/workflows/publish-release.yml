@@ -98,4 +98,4 @@ jobs:
           name: ${{ github.ref_name }}
           files: assets/*
           body: |
-            [Changelod](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${{ steps.release-id.outputs.id }})
+            [Changelog](https://github.com/${{ github.repository }}/blob/main/CHANGELOG.md#${{ steps.release-id.outputs.id }})
