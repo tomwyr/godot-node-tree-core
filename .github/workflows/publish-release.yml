@@ -61,6 +61,11 @@ jobs:
         id: prepare-binary
         shell: bash
         run: scripts/prepare-binary.sh
+        env:
+          LIB_FILE_NAME: ${{ matrix.file_name }}
+          LIB_EXTENSION: ${{ matrix.file_ext }}
+          TARGET_PLATFORM: ${{ matrix.platform }}
+          VERSION: ${{ github.ref_name }}
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
