@@ -324,7 +324,7 @@ import Testing
 
   private func generate(testCase: String) throws -> NodeTree {
     try NodeTreeGenerator().generate(
-      projectPath: "Tests/Resources/\(testCase)/project.godot",
+      projectPath: "Tests/Resources/\(testCase)",
       validateProjectPath: false,
     )
   }
