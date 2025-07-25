@@ -14,7 +14,7 @@ struct GodotProjectReader {
 
   private func scanScenes(_ projectPath: String) throws(GodotNodeTreeError) -> [URL] {
     do {
-      let directory = URL(fileURLWithPath: projectPath).deletingLastPathComponent()
+      let directory = URL(fileURLWithPath: projectPath)
       return try directory.walkTopDown(includeHidden: false).filter { $0.pathExtension == "tscn" }
     } catch {
       throw .scanningScenesFailed(projectPath: projectPath)
